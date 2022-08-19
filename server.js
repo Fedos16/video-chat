@@ -9,6 +9,14 @@ const io = require('socket.io')(server);
 const users = {};
 const socketToRoom = {};
 
+if (process.env.IS_PRODUCTION) {
+    const serveStatic = require('serve-static');
+    const history = require('connect-history-api-fallback');
+  
+    app.use(history());
+    app.use(serveStatic(path.join(__dirname, 'static')))
+  }
+
 io.on('connection', socket => {
     socket.on("join room", roomID => {
         if (users[roomID]) {
